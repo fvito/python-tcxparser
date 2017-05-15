@@ -64,7 +64,10 @@ class TCXParser:
     def hr_avg(self):
         """Average heart rate of the workout"""
         hr_data = self.hr_values()
-        return sum(hr_data)/len(hr_data)
+        if len(hr_data) < 1:
+            return 0
+        else:
+            return sum(hr_data)/len(hr_data)
 
     @property
     def hr_max(self):
@@ -86,7 +89,10 @@ class TCXParser:
     def altitude_avg(self):
         """Average altitude for the workout"""
         altitude_data = self.altitude_points()
-        return sum(altitude_data)/len(altitude_data)
+        if len(altitude_data) < 1:
+            return 0
+        else:
+            return sum(altitude_data)/len(altitude_data)
 
     @property
     def altitude_max(self):
