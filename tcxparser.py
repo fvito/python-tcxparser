@@ -27,6 +27,13 @@ class TCXParser(object):
         return [x.pyval for x in self.root.xpath('//ns:Trackpoint//ns:Extensions//ns2:TPX//ns2:Speed',
                                                  namespaces={'ns': namespace, 'ns2': ext_namespace})]
 
+    def all_trackpoints(self):
+        points = list()
+        for x in self.root.xpath('//ns:Trackpoint', namespaces={'ns': namespace}):
+            if hasattr(x,'Position'):
+                points.append(Trackpoint(x.Position.LatitudeDegrees.pyval, x.Position.LongitudeDegrees.pyval, x.Time.pyval))
+        return points
+
     @property
     def latitude(self):
         if hasattr(self.activity.Lap.Track.Trackpoint, 'Position'):
@@ -158,22 +165,32 @@ class TCXParser(object):
 
 
 class Trackpoint(object):
-    def __init__(self, lat, lng):
+
+    def __init__(self, lat, lng, time):
         self.latitude = lat
         self.longitude = lng
+        self.time = time
+
+    @property
+    def time(self):
+        return self._time
+
+    @time.setter
+    def time(self, value):
+        self._time = value
 
     @property
     def latitude(self):
-        return self.latitude
+        return self._latitude
 
     @latitude.setter
     def latitude(self, value):
-        self.latitude = value
+        self._latitude = value
 
     @property
     def longitude(self):
-        return self.longitude
+        return self._longitude
 
     @longitude.setter
     def longitude(self, value):
-        self.longitude = value
+        self._longitude = value
